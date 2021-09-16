@@ -72,17 +72,12 @@ def main():
         {'username': 'root', 'ip': 'f53.foo.net'},
     ]
 
-    for F5 in F5s:
-        print(getpasswordenc.get_password(F5['ip'], F5['username']))
-
-    import sys
-    sys.exit()
-
     CommandList = [
         'tmsh -q -c "cd /;show running-config recursive"',
     ]
 
     for DeviceKwargs in F5s:
+        DeviceKwargs['password'] = getpasswordenc.get_password(DeviceKwargs['ip'], DeviceKwargs['username'])
         r = get_config_paramiko(DeviceKwargs, CommandList)
 
         # Only run full backups on day specified
